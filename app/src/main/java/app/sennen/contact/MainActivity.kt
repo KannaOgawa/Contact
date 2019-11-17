@@ -18,7 +18,7 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
-    //コミットできない〜
+    //コミットできた〜
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
