@@ -23,19 +23,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        button.setOnClickListener {
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//oreo以上
-                val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                val channel = NotificationChannel(
-                    "default",
-                    "Default",
-                    NotificationManager.IMPORTANCE_DEFAULT
-                )
-                channel.description = "Default channel"
-                manager.createNotificationChannel(channel)
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//oreo以上
+            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val channel = NotificationChannel(
+                "default",
+                "Default",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            channel.description = "Default channel"
+            manager.createNotificationChannel(channel)
+        }
 
+
+       /* button.setOnClickListener {
             val intent = MainActivity.createIntent(this)
             val contentIntent = PendingIntent.getActivity(
                 applicationContext,
@@ -60,17 +61,17 @@ class MainActivity : AppCompatActivity() {
 
             val manager = NotificationManagerCompat.from(this)
             manager.notify(1, notification)
-        }
-        button2.setOnClickListener {
+        }*/
+        button.setOnClickListener {
             val intent =BCReceiver.createIntent(this)
             val contentIntent = PendingIntent.getBroadcast(applicationContext, 1, intent, PendingIntent.FLAG_ONE_SHOT)
 
             val trigger = Calendar.getInstance()
-            trigger.add(Calendar.HOUR, 1)
+            trigger.add(Calendar.SECOND, 30)
 
             val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             manager.setExact(AlarmManager.RTC_WAKEUP, trigger.timeInMillis, contentIntent)
-            button2.setBackgroundColor(Color.GREEN)
+            button.setBackgroundColor(Color.GREEN)
 
         }
     }
