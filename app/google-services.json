@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "469989166112",
+    "firebase_url": "https://contact-45efb.firebaseio.com",
+    "project_id": "contact-45efb",
+    "storage_bucket": "contact-45efb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469989166112:android:111912974935b9b58e0045",
+        "android_client_info": {
+          "package_name": "app.sennen.contact"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "469989166112-3dfookhof5sbm879h0khqeadvqt6e2f6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqHVmKKa1a7fcXpNBPRtzGWj02QerGpEs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "469989166112-3dfookhof5sbm879h0khqeadvqt6e2f6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
