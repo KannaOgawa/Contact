@@ -12,17 +12,27 @@ import kotlinx.android.synthetic.main.activity_main.*
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
-    //コミットできた〜
+    override fun onResume() {
+        super.onResume()
+        var name = intent.getStringExtra("name")
+        var num = intent.getIntExtra("num",0)
+        var limit = intent.getIntExtra("limit",0)
+        nameText.text=name
+        textView.text=limit.toString()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//oreo以上
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -73,6 +83,11 @@ class MainActivity : AppCompatActivity() {
             manager.setExact(AlarmManager.RTC_WAKEUP, trigger.timeInMillis, contentIntent)
             button.setBackgroundColor(Color.GREEN)
 
+        }
+
+        button2.setOnClickListener {
+            val intent = Intent(this,ContactListActivity::class.java)
+            startActivity(intent)
         }
     }
 
