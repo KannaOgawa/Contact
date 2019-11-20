@@ -29,7 +29,7 @@ class AddActivity : AppCompatActivity() {
                 // 取得したテキストを TextView に張り付ける
                 limit =  Integer.parseInt(limitEditText.text.toString())
             }
-            val intent = Intent(this,MainActivity::class.java)
+            val intent = Intent(this,ContactListActivity::class.java)
             intent.putExtra("name",name)
             intent.putExtra("num",num)
             intent.putExtra("limit",limit)

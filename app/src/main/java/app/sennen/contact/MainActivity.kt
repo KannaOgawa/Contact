@@ -15,22 +15,44 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.android.synthetic.main.activity_contact_list.*
 import java.util.*
 
 
+
 class MainActivity : AppCompatActivity() {
+
+
+   // lateinit var database: DatabaseReference// ...
+
+
+    var limit:Int=0
+    var num:Int=0
+    val list = arrayListOf<Contact>(Contact(id = 0, name = "name", limit = 1, num = 1))
+
     override fun onResume() {
         super.onResume()
         var name = intent.getStringExtra("name")
-        var num = intent.getIntExtra("num",0)
-        var limit = intent.getIntExtra("limit",0)
+        num = intent.getIntExtra("num",0)
+        limit = intent.getIntExtra("limit",0)
         nameText.text=name
         textView.text=limit.toString()
     }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val database = FirebaseDatabase.getInstance()
+        val ref = database.getReference("hogehoge")
+
+
+        var adapter = MainListAdapter(this, list)
+        mainlist.adapter = adapter
 
 
 
@@ -46,46 +68,30 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-       /* button.setOnClickListener {
-            val intent = MainActivity.createIntent(this)
-            val contentIntent = PendingIntent.getActivity(
-                applicationContext,
-                0,
-                intent,
-                PendingIntent.FLAG_ONE_SHOT
-            )
-
-            val notification = NotificationCompat.Builder(this, "default")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("タイトル")
-                .setContentText("内容")
-                .setContentIntent(contentIntent)
-                .setAutoCancel(true)
-                .setLargeIcon(
-                    BitmapFactory.decodeResource(
-                        resources,
-                        R.drawable.ic_launcher_background
-                    )
-                )
-                .build()
-
-            val manager = NotificationManagerCompat.from(this)
-            manager.notify(1, notification)
-        }*/
-        button.setOnClickListener {
+        textView.setOnClickListener {
             val intent =BCReceiver.createIntent(this)
             val contentIntent = PendingIntent.getBroadcast(applicationContext, 1, intent, PendingIntent.FLAG_ONE_SHOT)
 
             val trigger = Calendar.getInstance()
-            trigger.add(Calendar.SECOND, 30)
+            trigger.add(Calendar.SECOND, limit)
 
             val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             manager.setExact(AlarmManager.RTC_WAKEUP, trigger.timeInMillis, contentIntent)
-            button.setBackgroundColor(Color.GREEN)
+            textView.setBackgroundColor(Color.GREEN)
 
         }
 
-        button2.setOnClickListener {
+
+        settingButton.setOnClickListener {
+//            val intent = Intent(this,AddActivity::class.java)
+//            startActivity(intent)
+
+            ref.setValue("fugafuga")
+            settingButton.setBackgroundColor(Color.GREEN)
+
+
+        }
+        listButton.setOnClickListener {
             val intent = Intent(this,ContactListActivity::class.java)
             startActivity(intent)
         }
@@ -94,4 +100,5 @@ class MainActivity : AppCompatActivity() {
     companion object {
         fun createIntent(context: Context): Intent = Intent(context, MainActivity::class.java)
     }
+
 }

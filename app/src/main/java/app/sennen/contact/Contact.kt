@@ -1,5 +1,8 @@
 package app.sennen.contact
 
-data class Contact(val id: Int,val name: String, val num: Int,val limit :Int) {
+import com.google.firebase.database.IgnoreExtraProperties
+
+@IgnoreExtraProperties
+data class Contact(val id: Int,val name: String?,val limit :Int, val num: Int) {
 
 }
