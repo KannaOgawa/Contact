@@ -9,15 +9,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
-import android.util.Log
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import kotlinx.android.synthetic.main.activity_contact_list.*
 import java.util.*
 
 
@@ -30,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     var limit:Int=0
     var num:Int=0
-    val list = arrayListOf<Contact>(Contact(id = 0, name = "name", limit = 1, num = 1))
+    val list = arrayListOf<Contact>(Contact(name = "name", limit = 1, num = 1))
 
     override fun onResume() {
         super.onResume()
@@ -41,20 +35,11 @@ class MainActivity : AppCompatActivity() {
         textView.text=limit.toString()
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val database = FirebaseDatabase.getInstance()
-        val ref = database.getReference("hogehoge")
-
-
-        var adapter = MainListAdapter(this, list)
-        mainlist.adapter = adapter
-
-
+//        var adapter = MainListAdapter(this, list)
+//        mainlist.adapter = adapter
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//oreo以上
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -73,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             val contentIntent = PendingIntent.getBroadcast(applicationContext, 1, intent, PendingIntent.FLAG_ONE_SHOT)
 
             val trigger = Calendar.getInstance()
-            trigger.add(Calendar.SECOND, limit)
+            trigger.add(Calendar.MINUTE,3)
 
             val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             manager.setExact(AlarmManager.RTC_WAKEUP, trigger.timeInMillis, contentIntent)
@@ -85,11 +70,7 @@ class MainActivity : AppCompatActivity() {
         settingButton.setOnClickListener {
 //            val intent = Intent(this,AddActivity::class.java)
 //            startActivity(intent)
-
-            ref.setValue("fugafuga")
             settingButton.setBackgroundColor(Color.GREEN)
-
-
         }
         listButton.setOnClickListener {
             val intent = Intent(this,ContactListActivity::class.java)

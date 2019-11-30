@@ -11,6 +11,7 @@
         android:layout_marginLeft="32dp"
         android:layout_weight="1"
         android:text="アキビューモイスト"
+        android:textColor="#FFFFFF"
         android:textSize="24sp" />
 
     <TextView
@@ -21,5 +22,6 @@
         android:layout_weight="1"
         android:gravity="right"
         android:text="20"
+        android:textColor="#FFFFFF"
         android:textSize="24sp" />
 </LinearLayout>

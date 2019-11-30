@@ -6,15 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import kotlinx.android.synthetic.main.custom_list_layout.view.*
 import kotlinx.android.synthetic.main.custom_list_layout.view.textView
 import kotlinx.android.synthetic.main.custom_list_layout.view.textView2
 import kotlinx.android.synthetic.main.custom_list_layout2.view.*
 
 class MainListAdapter(val context: Context, val contactList: ArrayList<Contact>) : BaseAdapter() {
+
     override fun getItemId(position: Int): Long {
         return contactList[position].id.toLong()
-
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -22,8 +21,7 @@ class MainListAdapter(val context: Context, val contactList: ArrayList<Contact>)
         val view = layoutInflater.inflate(R.layout.custom_list_layout2, parent, false)
         view.textView.text=contactList[position].name
         view.textView2.text=contactList[position].num.toString()
-            view.progressBar2.progress = 50
-
+        view.progressBar2.progress = 50
         return view
     }
 

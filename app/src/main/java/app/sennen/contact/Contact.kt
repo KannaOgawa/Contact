@@ -1,8 +1,13 @@
 package app.sennen.contact
 
-import com.google.firebase.database.IgnoreExtraProperties
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
+import java.util.*
 
-@IgnoreExtraProperties
-data class Contact(val id: Int,val name: String?,val limit :Int, val num: Int) {
+open class Contact(
+    @PrimaryKey open var id: String = UUID.randomUUID().toString(),
+    open var name: String?="",
+    open var limit: Int=0,
+    open var num: Int=0
+) : RealmObject()
 
-}
