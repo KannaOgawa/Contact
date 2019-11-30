@@ -18,9 +18,6 @@ class ContactListAdapter(val context: Context, val contactList: OrderedRealmColl
     RealmBaseAdapter<Contact>(contactList) {
 
 
-    override fun getItemId(position: Int): Long {
-        return contactList[position].id.toLong()
-    }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

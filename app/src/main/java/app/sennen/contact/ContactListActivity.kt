@@ -27,7 +27,7 @@ class ContactListActivity : AppCompatActivity() {
 
 
         if (taskList.isEmpty()) {
-            createDummyData()
+            create("名前",14,1)
         }
 
 
@@ -52,11 +52,6 @@ class ContactListActivity : AppCompatActivity() {
         }
     }
 
-    fun createDummyData() {
-        for (i in 0..3) {
-            create("名前 $i",i,i)
-        }
-    }
 
     fun readAll(): RealmResults<Contact>{
         return realm.where(Contact::class.java).findAll().sort("name", Sort.ASCENDING)

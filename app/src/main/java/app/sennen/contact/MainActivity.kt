@@ -18,28 +18,9 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-
-   // lateinit var database: DatabaseReference// ...
-
-
-    var limit:Int=0
-    var num:Int=0
-    val list = arrayListOf<Contact>(Contact(name = "name", limit = 1, num = 1))
-
-    override fun onResume() {
-        super.onResume()
-        var name = intent.getStringExtra("name")
-        num = intent.getIntExtra("num",0)
-        limit = intent.getIntExtra("limit",0)
-        nameText.text=name
-        textView.text=limit.toString()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        var adapter = MainListAdapter(this, list)
-//        mainlist.adapter = adapter
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//oreo以上
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

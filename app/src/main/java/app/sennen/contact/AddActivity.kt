@@ -3,8 +3,9 @@ package app.sennen.contact
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_add.*
+import java.util.*
 
 class AddActivity : AppCompatActivity() {
 
@@ -12,32 +13,30 @@ class AddActivity : AppCompatActivity() {
     var num : Int =0
     var limit : Int =0
 
+    private val realm: Realm by lazy {
+        Realm.getDefaultInstance()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
         button.setOnClickListener {
-            if(nameEditText.text != null){
-                // 取得したテキストを TextView に張り付ける
-                name = nameEditText.text.toString()
-            }
 
-            if(nameEditText.text != null){
-                // 取得したテキストを TextView に張り付ける
-                num = Integer.parseInt(numEditText.text.toString())
-            }
-            if(numEditText.text != null){
-                // 取得したテキストを TextView に張り付ける
-                limit =  Integer.parseInt(limitEditText.text.toString())
-            }
             val intent = Intent(this,ContactListActivity::class.java)
-            intent.putExtra("name",name)
-            intent.putExtra("num",num)
-            intent.putExtra("limit",limit)
+            realm.executeTransaction {
+
+                val contact = it.createObject(Contact::class.java, UUID.randomUUID().toString())
+                if(nameEditText.text != null){
+                    contact.name = nameEditText.text.toString()
+                }
+                if(nameEditText.text != null){
+                    contact.num = Integer.parseInt(numEditText.text.toString())
+                }
+                if(limitEditText.text != null){
+                    contact.limit =  Integer.parseInt(limitEditText.text.toString())
+                }
+            }
             startActivity(intent)
 
-            Log.e("showItem1 name",name)
-            Log.e("showItem1 num",num.toString())
-            Log.e("showItem1 limit",limit.toString())
 
         }
     }
