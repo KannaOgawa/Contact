@@ -9,7 +9,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -19,6 +18,11 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     lateinit var realm: Realm
+
+    override fun onResume() {
+        super.onResume()
+        setText()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,32 +38,36 @@ class MainActivity : AppCompatActivity() {
             channel.description = "Default channel"
             manager.createNotificationChannel(channel)
 
-            setText()
         }
 
 
-        textView.setOnClickListener {
-            val intent =BCReceiver.createIntent(this)
-            val contentIntent = PendingIntent.getBroadcast(applicationContext, 1, intent, PendingIntent.FLAG_ONE_SHOT)
-            var limitDay =Calendar.getInstance()
+        nameTextView.setOnClickListener {
+            val intent = BCReceiver.createIntent(this)
+            val contentIntent = PendingIntent.getBroadcast(
+                applicationContext,
+                1,
+                intent,
+                PendingIntent.FLAG_ONE_SHOT
+            )
+            var limitDay = Calendar.getInstance()
             val now = Calendar.getInstance()
-            limitDay.add(Calendar.MINUTE,3)
-            var diif:Int =getDiffDays(limitDay,now)
-            limitTextView.text=diif.toString()
-//            val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//            manager.setExact(AlarmManager.RTC_WAKEUP, limitDay.timeInMillis, contentIntent)
-            textView.setBackgroundColor(Color.GREEN)
+            limitDay.add(Calendar.SECOND, 3)
+            var diif: Int = getDiffDays(limitDay, now)
+            limitTextView.text = diif.toString()
+            val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            manager.setExact(AlarmManager.RTC_WAKEUP, limitDay.timeInMillis, contentIntent)
+            nameTextView.setBackgroundColor(Color.GREEN)
 
         }
 
 
         settingButton.setOnClickListener {
-//            val intent = Intent(this,AddActivity::class.java)
+            //            val intent = Intent(this,AddActivity::class.java)
 //            startActivity(intent)
             settingButton.setBackgroundColor(Color.GREEN)
         }
         listButton.setOnClickListener {
-            val intent = Intent(this,ContactListActivity::class.java)
+            val intent = Intent(this, ContactListActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -85,16 +93,15 @@ class MainActivity : AppCompatActivity() {
         return (diffTime / MILLIS_OF_DAY).toInt()
     }
 
-    fun setText(){
-
-
-        Log.e("tag","setText")
+    fun setText() {
         var mainContact = realm.where(Contact::class.java)
-            .equalTo("isOpen","1")
-            .findAll()
-        Log.d("tag",mainContact.toString())
+            .equalTo("isOpen", 1.toInt()).findFirst()
 
+        if (mainContact != null) {
+            limitTextView.text = mainContact.limit.toString()
+            nameTextView.text = mainContact.name
 
+        }
     }
 
 }
