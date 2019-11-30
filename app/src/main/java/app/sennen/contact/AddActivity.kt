@@ -36,8 +36,6 @@ class AddActivity : AppCompatActivity() {
                 }
             }
             startActivity(intent)
-
-
         }
     }
 }

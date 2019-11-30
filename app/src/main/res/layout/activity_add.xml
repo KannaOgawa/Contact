@@ -8,84 +8,76 @@
     tools:context=".AddActivity">
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/addText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
+        android:layout_marginTop="104dp"
         android:text="名前"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/nameEditText"
-        app:layout_constraintEnd_toStartOf="@+id/nameEditText"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/addText3"
+        app:layout_constraintStart_toStartOf="@+id/addText3"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/addText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="73dp"
-        android:layout_marginEnd="14dp"
+        android:layout_marginStart="65dp"
+        android:layout_marginTop="75dp"
         android:text="期限"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/limitEditText"
-        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/addText3" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/addText3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="14dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginTop="56dp"
         android:text="個数"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/numEditText"
-        app:layout_constraintEnd_toStartOf="@+id/numEditText"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/addText2"
+        app:layout_constraintStart_toStartOf="@+id/addText2"
+        app:layout_constraintTop_toBottomOf="@+id/addText1" />
 
     <EditText
         android:id="@+id/nameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="91dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
         android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/addText1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView1"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/addText1" />
 
     <EditText
         android:id="@+id/numEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
         android:layout_marginEnd="6dp"
         android:ems="10"
         android:inputType="number"
         android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/addText3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
+        app:layout_constraintTop_toTopOf="@+id/addText3" />
 
     <EditText
         android:id="@+id/limitEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="6dp"
-        android:layout_marginBottom="1dp"
         android:ems="10"
         android:inputType="number"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintBottom_toBottomOf="@+id/addText2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView2" />
+        app:layout_constraintTop_toTopOf="@+id/addText2" />
 
     <Button
         android:id="@+id/button"

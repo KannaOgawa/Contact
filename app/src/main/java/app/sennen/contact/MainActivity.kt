@@ -11,13 +11,9 @@ import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
 import android.graphics.Color
 import android.os.Build
-import com.google.firebase.database.FirebaseDatabase
 import java.util.*
 
-
-
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -56,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         listButton.setOnClickListener {
             val intent = Intent(this,ContactListActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 

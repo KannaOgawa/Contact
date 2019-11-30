@@ -26,23 +26,24 @@ class ContactListActivity : AppCompatActivity() {
         listView1.adapter = adapter
 
 
+
         if (taskList.isEmpty()) {
-            create("名前",14,1)
+            create("名前",100,100)
         }
-
-
         addButton.setOnClickListener {
             val intent = Intent(this, AddActivity::class.java)
             startActivity(intent)
-        }
+            finish()
 
+        }
 
         homeButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
-
     }
+
     fun create(name: String,l:Int,n:Int) {
         realm.executeTransaction {
             val contact = it.createObject(Contact::class.java, UUID.randomUUID().toString())
