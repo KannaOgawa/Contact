@@ -8,7 +8,7 @@
             android:thickness="10dp"
             android:useLevel="false">
             <solid
-                android:color="#64B5F6"/>
+                android:color="#FF4FC3F7"/>
         </shape>
     </item>
    

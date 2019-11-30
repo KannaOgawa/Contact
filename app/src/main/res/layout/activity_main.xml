@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#64B5F6"
+    android:background="#4FC3F7"
     tools:context=".MainActivity">
 
 
@@ -56,11 +56,10 @@
         android:id="@+id/mainlist"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:divider="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar"
-      android:divider="@null"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
 
     <LinearLayout
