@@ -1,7 +1,8 @@
 package app.sennen.contact
 
+import android.app.AlertDialog
 import android.content.Context
-import android.util.Log
+import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +21,7 @@ class ContactListAdapter(val context: Context, val contactList: OrderedRealmColl
         view.listText2.text=contactList[position].num.toString()+"個"
         view.listText1.text=contactList[position].name
         view.setOnClickListener{
-            Log.e("tag","onClick")
+            onClick(contactList,position)
         }
         return view
     }
@@ -28,8 +29,7 @@ class ContactListAdapter(val context: Context, val contactList: OrderedRealmColl
         return contactList.size
     }
 
-    fun onClick(){
-        Log.e("tag","onClick")
-
+    fun onClick(contactList: OrderedRealmCollection<Contact>,position: Int){
+        contactList[position].isOpen=1
     }
 }

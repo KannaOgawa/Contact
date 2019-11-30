@@ -1,6 +1,10 @@
 package app.sennen.contact
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +12,7 @@ import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
 import kotlinx.android.synthetic.main.activity_contact_list.*
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class ContactListActivity : AppCompatActivity() {
@@ -58,4 +63,13 @@ class ContactListActivity : AppCompatActivity() {
         return realm.where(Contact::class.java).findAll().sort("name", Sort.ASCENDING)
     }
 
+
+
+    fun openContact(){
+        val intent =BCReceiver.createIntent(this)
+        val contentIntent = PendingIntent.getBroadcast(applicationContext, 1, intent, PendingIntent.FLAG_ONE_SHOT)
+        var limitDay =Calendar.getInstance()
+        val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            manager.setExact(AlarmManager.RTC_WAKEUP, limitDay.timeInMillis, contentIntent)
+    }
 }
