@@ -9,25 +9,34 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.RealmResults
+import io.realm.Sort
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var realm: Realm
+    private val realm: Realm by lazy {
+        Realm.getDefaultInstance()
+    }
+    var openContactList = readOpen()
 
     override fun onResume() {
         super.onResume()
-        setText()
+        showProgress()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initRealm()
+        var mainAdapter = MainListAdapter(this, openContactList)
+        mainlist.adapter=mainAdapter
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//oreo以上
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val channel = NotificationChannel(
@@ -77,13 +86,7 @@ class MainActivity : AppCompatActivity() {
         fun createIntent(context: Context): Intent = Intent(context, MainActivity::class.java)
     }
 
-    private fun initRealm() {
-        val realmConfiguration = RealmConfiguration.Builder()
-            .deleteRealmIfMigrationNeeded()
-            .schemaVersion(0)
-            .build()
-        realm = Realm.getInstance(realmConfiguration)
-    }
+
 
     fun getDiffDays(calendar1: Calendar, calendar2: Calendar): Int {
         //==== ミリ秒単位での差分算出 ====//
@@ -92,16 +95,45 @@ class MainActivity : AppCompatActivity() {
         val MILLIS_OF_DAY = 1000 * 60 //* 60 * 24
         return (diffTime / MILLIS_OF_DAY).toInt()
     }
+    fun diffDays(calendar1: Long): Int {
 
-    fun setText() {
+        val now = Calendar.getInstance ()
+        //==== ミリ秒単位での差分算出 ====//
+        val diffTime = now.timeInMillis-calendar1
+        //==== 日単位に変換 ====//
+        val MILLIS_OF_DAY = 1000 * 60 //* 60 * 24
+        return (diffTime / MILLIS_OF_DAY).toInt()
+    }
+
+    fun showProgress() {
+
         var mainContact = realm.where(Contact::class.java)
-            .equalTo("isOpen", 1.toInt()).findFirst()
+            .greaterThan("openDate", 0.toInt()).findFirst()
 
         if (mainContact != null) {
-            limitTextView.text = mainContact.limit.toString()
+            var tmp:Int = diffDays(mainContact.openDate)//開封日から現在の経過
+            var diff=mainContact.limit-tmp//残り
+            var castd= diff.toDouble()
+            var percent =( castd /(mainContact.limit))*100
+
+            progressBar.setProgress(percent.toInt())
+            limitTextView.text =diff.toString()
             nameTextView.text = mainContact.name
 
+            Log.e("percent",(percent.toInt().toString()))
+            Log.e("diff",(diff.toString()))
+            Log.e("tmp",(tmp.toString()))
+
+
         }
+
     }
+
+    fun readOpen(): RealmResults<Contact> {
+        return realm.where(Contact::class.java).greaterThan("openDate", 0.toInt())
+            .findAll().sort("name", Sort.ASCENDING)
+    }
+
+
 
 }

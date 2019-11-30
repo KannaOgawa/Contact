@@ -1,19 +1,15 @@
 package app.sennen.contact
-
-
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
+import io.realm.OrderedRealmCollection
+import io.realm.RealmBaseAdapter
 import kotlinx.android.synthetic.main.custom_list_layout2.view.*
 
 
-class MainListAdapter(val context: Context, val contactList: ArrayList<Contact>) : BaseAdapter() {
-
-    override fun getItemId(position: Int): Long {
-        return contactList[position].id.toLong()
-    }
+class MainListAdapter(val context: Context,val contactList: OrderedRealmCollection<Contact>) :
+RealmBaseAdapter<Contact>(contactList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -24,9 +20,6 @@ class MainListAdapter(val context: Context, val contactList: ArrayList<Contact>)
         return view
     }
 
-    override fun getItem(position: Int): Any {
-        return contactList[position]
-    }
 
     override fun getCount(): Int {
         return contactList.size

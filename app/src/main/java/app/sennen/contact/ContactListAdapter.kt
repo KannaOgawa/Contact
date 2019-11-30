@@ -9,6 +9,7 @@ import io.realm.OrderedRealmCollection
 import io.realm.Realm
 import io.realm.RealmBaseAdapter
 import kotlinx.android.synthetic.main.custom_list_layout.view.*
+import java.util.*
 
 
 class ContactListAdapter(val context: Context, val contactList: OrderedRealmCollection<Contact>) :
@@ -33,10 +34,11 @@ class ContactListAdapter(val context: Context, val contactList: OrderedRealmColl
 
     fun onClick(contactList: OrderedRealmCollection<Contact>, position: Int) {
         var realm = Realm.getDefaultInstance()
-        realm.executeTransaction {
-            contactList[position].isOpen = 1
-            contactList[position].num--
+        val now = Calendar.getInstance ()
 
+        realm.executeTransaction {
+            contactList[position].openDate = now.timeInMillis
+            contactList[position].num--
         }
     }
 }
