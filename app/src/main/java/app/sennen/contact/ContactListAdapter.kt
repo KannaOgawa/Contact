@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.custom_list_layout.view.*
 import java.util.*
 
 
-class ContactListAdapter(val context: Context, val contactList: OrderedRealmCollection<Contact>,var lister:Click) :
+class ContactListAdapter(val context: Context, val contactList: OrderedRealmCollection<Contact>) :
     RealmBaseAdapter<Contact>(contactList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -23,25 +23,7 @@ class ContactListAdapter(val context: Context, val contactList: OrderedRealmColl
         view.listText3.text = contactList[position].limit.toString() + "日"
         view.listText2.text = contactList[position].num.toString() + "個"
         view.listText1.text = contactList[position].name
-        view.customListmView.setOnClickListener {
-            //lister.onclick(position)
-            AlertDialog.Builder(this.context)
-                    .setTitle("コンタクト開封")
-                    .setMessage("使用開始しますか？")
-                    .setPositiveButton("OK") { dialog, which ->
-                        lister.onclick(position)
-                        var realm = Realm.getDefaultInstance()
-                        val now = Calendar.getInstance ()
 
-                        realm.executeTransaction {
-                            contactList[position].openDate = now.timeInMillis
-                            contactList[position].num--
-                        }
-
-                    }
-                    .setNegativeButton("Cancel", null)
-                    .show()
-        }
         return view
     }
 

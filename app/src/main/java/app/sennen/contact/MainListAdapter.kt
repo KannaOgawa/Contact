@@ -15,11 +15,18 @@ class MainListAdapter(val context: Context,val contactList: OrderedRealmCollecti
 
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = layoutInflater.inflate(R.layout.custom_list_layout2, parent, false)
+        if(position==0){
+            view.listText2_1.text = ""
+            view.listText2_2.text = ""
+            view.progressBar2.setVisibility(View.INVISIBLE)
+            view.setOnClickListener{}
+            return view
+        }else {
             view.listText2_1.text = contactList[position].name
             view.listText2_2.text = contactList[position].limit.toString()
             view.progressBar2.progress = showProgress(position)
-
-        return view
+            return view
+        }
     }
 
     override fun getCount(): Int {

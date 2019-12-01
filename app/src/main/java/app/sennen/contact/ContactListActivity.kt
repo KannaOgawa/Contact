@@ -26,42 +26,14 @@ class ContactListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact_list)
 
-        var adapter = ContactListAdapter(this, list, object : ContactListAdapter.Click {
-            override fun onclick(position: Int) {
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//oreo以上
-                    val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    val channel = NotificationChannel(
-                        "default",
-                        "Default",
-                        NotificationManager.IMPORTANCE_DEFAULT
-                    )
-                    channel.description = "Default channel"
-                    manager.createNotificationChannel(channel)
-                }
-                val intent = BCReceiver.createIntent(applicationContext)
-                val contentIntent = PendingIntent.getBroadcast(
-                    applicationContext,
-                    1,
-                    intent,
-                    PendingIntent.FLAG_ONE_SHOT
-                )
-                var limitDay = Calendar.getInstance()
-                limitDay.add(Calendar.SECOND,list[position]?.limit ?: 0)
-                val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                manager.setExact(AlarmManager.RTC_WAKEUP, limitDay.timeInMillis, contentIntent)
-            }
-        })
+        var adapter = ContactListAdapter(this, list)
 
 
         listView1.adapter = adapter
-//
-//        listView1.setOnItemClickListener { parent, view, position, id ->
-//
-//            Log.e("tag","setOnItemClickListener")
-//
-//
-//        }
+
+        listView1.setOnItemClickListener { parent, view, position, id ->
+            open(position)
+        }
 
 //        if (list.isEmpty()) {
 //            create("contactName", 14, 3)
@@ -99,6 +71,53 @@ class ContactListActivity : AppCompatActivity() {
         fun createIntent(context: Context): Intent = Intent(context, MainActivity::class.java)
     }
 
+
+    fun open(position:Int){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//oreo以上
+            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val channel = NotificationChannel(
+                "default",
+                "Default",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            channel.description = "Default channel"
+            manager.createNotificationChannel(channel)
+        }
+        //lister.onclick(position)
+        AlertDialog.Builder(this)
+            .setTitle("コンタクト開封")
+            .setMessage("使用開始しますか？")
+            .setPositiveButton("OK") { dialog, which ->
+
+                var realm = Realm.getDefaultInstance()
+                val now = Calendar.getInstance ()
+
+                val intent = BCReceiver.createIntent(this)
+                val contentIntent = PendingIntent.getBroadcast(
+                    this,
+                    1,
+                    intent,
+                    PendingIntent.FLAG_ONE_SHOT
+                )
+                var limitDay = Calendar.getInstance()
+                limitDay.add(Calendar.SECOND,list[position]?.limit ?: 0)
+                val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                manager.setExact(AlarmManager.RTC_WAKEUP, limitDay.timeInMillis, contentIntent)
+
+                realm.executeTransaction {
+                    list[position]?.openDate = now.timeInMillis
+                    list[position]!!.num--
+
+                }
+                Log.e("tag",list[position]?.num.toString())
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+
+
+
+
+    }
 
 
 
