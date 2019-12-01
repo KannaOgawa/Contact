@@ -35,10 +35,12 @@ class MainActivity : AppCompatActivity() {
         var resultArray = realm.where(Contact::class.java).greaterThan("openDate", 0.toInt())
             .findAll().sort("openDate", Sort.ASCENDING)
         for (result in resultArray) {
-            var limit = Calendar.getInstance()
-            limit.add(Calendar.MINUTE, result.limit)
+
             realm.executeTransaction {
-                result.diff = diffDayCal(result.openDate, limit)//残り何日
+                result.diff = result.limit-diffNow(result.openDate)//残り何日
+                Log.e("tag",result.diff.toString())
+
+
             }
         }
     }
@@ -90,8 +92,7 @@ class MainActivity : AppCompatActivity() {
         var mainContact = realm.where(Contact::class.java)
             .greaterThan("openDate", 0.toInt()).sort("diff", Sort.ASCENDING).findFirst()
         if (mainContact != null) {
-            var tmp = diffNow(mainContact.openDate)
-            var d = mainContact.limit -tmp//残り
+            var d = mainContact.diff
             var castd = d.toDouble()
             var percent = (castd / (mainContact.limit)) * 100
 
