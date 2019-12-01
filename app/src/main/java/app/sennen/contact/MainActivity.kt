@@ -30,26 +30,23 @@ class MainActivity : AppCompatActivity() {
         updateScreen()
     }
     fun readOpen(): RealmResults<Contact> {
+        calc()
         return realm.where(Contact::class.java).greaterThan("openDate", 0.toInt())
-            .findAll().sort("name", Sort.ASCENDING)
+            .findAll().sort("diff", Sort.ASCENDING)
     }
 
-    fun calc(): RealmResults<Contact> {
+    fun calc() {
         var resultArray = realm.where(Contact::class.java).greaterThan("openDate", 0.toInt())
-            .findAll()//.sort("openDate", Sort.ASCENDING)
+            .findAll().sort("openDate", Sort.ASCENDING)
 
         for (result in resultArray) {
+
+            var limit = Calendar.getInstance()
+            limit.add(Calendar.DATE,result.limit)
             realm.executeTransaction {
-                result.diff=diffDays(result.openDate+result.limit*1000 * 60 * 60 * 24)//残り何日
+                result.diff=diffDayscal(result.openDate,limit)//残り何日
             }
         }
-
-        resultArray = realm.where(Contact::class.java).greaterThan("openDate", 0.toInt())
-            .findAll().sort("diff",Sort.ASCENDING)
-
-        Log.e("array",resultArray.toString())
-
-        return  resultArray
     }
 
 
@@ -58,24 +55,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         var mainAdapter = MainListAdapter(this, openContactList)
         mainlist.adapter = mainAdapter
-
-
-        nameTextView.setOnClickListener {
-            val intent = BCReceiver.createIntent(this)
-            val contentIntent = PendingIntent.getBroadcast(
-                applicationContext,
-                1,
-                intent,
-                PendingIntent.FLAG_ONE_SHOT
-            )
-            var limitDay = Calendar.getInstance()
-            val now = Calendar.getInstance()
-            var diif: Int = getDiffDays(limitDay, now)
-            val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            manager.setExact(AlarmManager.RTC_WAKEUP, limitDay.timeInMillis, contentIntent)
-            nameTextView.setBackgroundColor(Color.GREEN)
-        }
-
         settingButton.setOnClickListener {
             delete(openContactList[0]!!)
         }
@@ -86,23 +65,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getDiffDays(calendar1: Calendar, calendar2: Calendar): Int {
-        //==== ミリ秒単位での差分算出 ====//
-        val diffTime = calendar1.timeInMillis - calendar2.timeInMillis
-        //==== 日単位に変換 ====//
-        val MILLIS_OF_DAY = 1000 * 60 //* 60 * 24
-        return (diffTime / MILLIS_OF_DAY).toInt()
-    }
-
     fun diffDays(calendar1: Long): Int {
         val now = Calendar.getInstance()
         //==== ミリ秒単位での差分算出 ====//
         val diffTime =  calendar1 - now.timeInMillis
         //==== 日単位に変換 ====//
-        val MILLIS_OF_DAY = 1000 * 60 * 60 * 24
+        val MILLIS_OF_DAY:Long = 1000 * 60 * 60 * 24
         return (diffTime / MILLIS_OF_DAY).toInt()
     }
 
+
+    fun diffDayscal(calendar1: Long,calendar2: Calendar): Int {
+        //==== ミリ秒単位での差分算出 ====//
+        val diffTime =  calendar2.timeInMillis-calendar1
+        //==== 日単位に変換 ====//
+        val MILLIS_OF_DAY:Long = 1000 * 60 * 60 * 24
+        return (diffTime / MILLIS_OF_DAY).toInt()
+    }
     fun updateScreen() {
 
         var mainContact = realm.where(Contact::class.java)

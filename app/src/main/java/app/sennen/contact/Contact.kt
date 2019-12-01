@@ -1,5 +1,6 @@
 package app.sennen.contact
 
+import io.realm.Realm
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import java.util.*
@@ -13,6 +14,10 @@ open class Contact(
     open var diff: Int=0
 
 
+) : RealmObject(){
 
-) : RealmObject()
-
+//    inline fun <reified Contact : RealmObject> Realm.getAutoIncrementKey(): Int {
+//        if (where(Contact::class.java).count() == 0L) return 1
+//        else return where(Contact::class.java).max("id")?.toInt()?.plus(1)!!
+//    }
+}
