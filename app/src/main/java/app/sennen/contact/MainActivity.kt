@@ -1,18 +1,12 @@
 package app.sennen.contact
 
-import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.os.Build
+
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import io.realm.Realm
-import io.realm.RealmConfiguration
 import io.realm.RealmResults
 import io.realm.Sort
 import kotlinx.android.synthetic.main.activity_main.*
@@ -62,6 +56,12 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ContactListActivity::class.java)
             startActivity(intent)
             finish()
+        }
+        
+        mainlist.setOnItemClickListener { parent, view, position, id ->
+
+            //view.visibility= View.INVISIBLE
+
         }
     }
 

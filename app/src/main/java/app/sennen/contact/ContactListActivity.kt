@@ -55,6 +55,13 @@ class ContactListActivity : AppCompatActivity() {
 
 
         listView1.adapter = adapter
+//
+//        listView1.setOnItemClickListener { parent, view, position, id ->
+//
+//            Log.e("tag","setOnItemClickListener")
+//
+//
+//        }
 
 //        if (list.isEmpty()) {
 //            create("contactName", 14, 3)
