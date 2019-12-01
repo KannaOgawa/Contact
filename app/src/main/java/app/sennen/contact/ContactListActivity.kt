@@ -109,7 +109,6 @@ class ContactListActivity : AppCompatActivity() {
                     list[position]!!.num--
 
                 }
-                Log.e("tag",list[position]?.num.toString())
             }
             .setNegativeButton("Cancel", null)
             .show()

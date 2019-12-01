@@ -23,21 +23,22 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         updateScreen()
     }
+
     fun readOpen(): RealmResults<Contact> {
         calc()
         return realm.where(Contact::class.java).greaterThan("openDate", 0.toInt())
             .findAll().sort("diff", Sort.ASCENDING)
     }
 
+
     fun calc() {
         var resultArray = realm.where(Contact::class.java).greaterThan("openDate", 0.toInt())
             .findAll().sort("openDate", Sort.ASCENDING)
         for (result in resultArray) {
-
             var limit = Calendar.getInstance()
-            limit.add(Calendar.DATE,result.limit)
+            limit.add(Calendar.MINUTE, result.limit)
             realm.executeTransaction {
-                result.diff=diffDaysal(result.openDate,limit)//残り何日
+                result.diff = diffDayCal(result.openDate, limit)//残り何日
             }
         }
     }
@@ -52,12 +53,13 @@ class MainActivity : AppCompatActivity() {
         settingButton.setOnClickListener {
             delete(openContactList[0]!!)
         }
+
         listButton.setOnClickListener {
             val intent = Intent(this, ContactListActivity::class.java)
             startActivity(intent)
             finish()
         }
-        
+
         mainlist.setOnItemClickListener { parent, view, position, id ->
 
             //view.visibility= View.INVISIBLE
@@ -65,36 +67,38 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun diffDays(calendar1: Long): Int {
+    fun diffNow(calendar1: Long): Int {
         val now = Calendar.getInstance()
         //==== ミリ秒単位での差分算出 ====//
-        val diffTime =  calendar1 - now.timeInMillis
+        val diffTime = now.timeInMillis-calendar1
         //==== 日単位に変換 ====//
-        val MILLIS_OF_DAY:Long = 1000 * 60 * 60 * 24
+        val MILLIS_OF_DAY: Long = 1000 * 60 //* 60 * 24
         return (diffTime / MILLIS_OF_DAY).toInt()
     }
 
 
-    fun diffDaysal(calendar1: Long,calendar2: Calendar): Int {
+    fun diffDayCal(calendar1: Long, calendar2: Calendar): Int {
         //==== ミリ秒単位での差分算出 ====//
-        val diffTime =  calendar2.timeInMillis-calendar1
+        val diffTime = calendar2.timeInMillis - calendar1
         //==== 日単位に変換 ====//
-        val MILLIS_OF_DAY:Long = 1000 * 60 * 60 * 24
+        val MILLIS_OF_DAY: Long = 1000 * 60 //* 60 * 24
         return (diffTime / MILLIS_OF_DAY).toInt()
     }
-    fun updateScreen() {
 
+    fun updateScreen() {
         calc()
         var mainContact = realm.where(Contact::class.java)
             .greaterThan("openDate", 0.toInt()).sort("diff", Sort.ASCENDING).findFirst()
         if (mainContact != null) {
-            var diff = mainContact.limit - diffDays(mainContact.openDate)//残り
-            var castd = diff.toDouble()
+            var tmp = diffNow(mainContact.openDate)
+            var d = mainContact.limit -tmp//残り
+            var castd = d.toDouble()
             var percent = (castd / (mainContact.limit)) * 100
 
             progressBar.setProgress(percent.toInt())
-            limitTextView.text = diff.toString()
+            limitTextView.text = d.toString()
             nameTextView.text = mainContact.name
+
         }
     }
 
