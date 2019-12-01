@@ -9,7 +9,9 @@ open class Contact(
     open var name: String?="",
     open var limit: Int=0,
     open var num: Int=0,
-    open var openDate: Long=0
+    open var openDate: Long=0,
+    open var diff: Int=0
+
 
 
 ) : RealmObject()
