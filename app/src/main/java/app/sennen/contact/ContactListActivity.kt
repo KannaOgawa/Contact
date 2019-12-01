@@ -1,11 +1,10 @@
 package app.sennen.contact
 
-import android.app.AlarmManager
-import android.app.AlertDialog
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -29,8 +28,17 @@ class ContactListActivity : AppCompatActivity() {
 
         var adapter = ContactListAdapter(this, list, object : ContactListAdapter.Click {
             override fun onclick(position: Int) {
-                Log.e("tag", "onclick")
 
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//oreo以上
+                    val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    val channel = NotificationChannel(
+                        "default",
+                        "Default",
+                        NotificationManager.IMPORTANCE_DEFAULT
+                    )
+                    channel.description = "Default channel"
+                    manager.createNotificationChannel(channel)
+                }
                 val intent = BCReceiver.createIntent(applicationContext)
                 val contentIntent = PendingIntent.getBroadcast(
                     applicationContext,
@@ -78,5 +86,13 @@ class ContactListActivity : AppCompatActivity() {
     fun readAll(): RealmResults<Contact> {
         return realm.where(Contact::class.java).findAll().sort("name", Sort.ASCENDING)
     }
+
+
+    companion object {
+        fun createIntent(context: Context): Intent = Intent(context, MainActivity::class.java)
+    }
+
+
+
 
 }

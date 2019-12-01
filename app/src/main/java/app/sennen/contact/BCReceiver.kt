@@ -10,13 +10,13 @@ import androidx.core.app.NotificationManagerCompat
 
 class BCReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        val newIntent = MainActivity.createIntent(context)
+        val newIntent = ContactListActivity.createIntent(context)
         val contentIntent = PendingIntent.getActivity(context, 0, newIntent, PendingIntent.FLAG_ONE_SHOT)
 
         val notification = NotificationCompat.Builder(context, "default")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("タイトル")
-            .setContentText("遅れてくる方")
+            .setContentTitle("ContactManager")
+            .setContentText("使用中のコンタクトの期限が切れます")
             .setContentIntent(contentIntent)
             .setAutoCancel(true)
             .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_launcher_background))

@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.custom_list_layout2.view.*
 import java.util.*
 
 class MainListAdapter(val context: Context,val contactList: OrderedRealmCollection<Contact>) :
-RealmBaseAdapter<Contact>(contactList) {
+    RealmBaseAdapter<Contact>(contactList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

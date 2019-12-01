@@ -18,6 +18,7 @@ import io.realm.Sort
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
+
 class MainActivity : AppCompatActivity() {
     private val realm: Realm by lazy {
         Realm.getDefaultInstance()
@@ -26,8 +27,31 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        showProgress()
+        updateScreen()
     }
+    fun readOpen(): RealmResults<Contact> {
+        return realm.where(Contact::class.java).greaterThan("openDate", 0.toInt())
+            .findAll().sort("name", Sort.ASCENDING)
+    }
+
+    fun calc(): RealmResults<Contact> {
+        var resultArray = realm.where(Contact::class.java).greaterThan("openDate", 0.toInt())
+            .findAll()//.sort("openDate", Sort.ASCENDING)
+
+        for (result in resultArray) {
+            realm.executeTransaction {
+                result.diff=diffDays(result.openDate+result.limit*1000 * 60 * 60 * 24)//残り何日
+            }
+        }
+
+        resultArray = realm.where(Contact::class.java).greaterThan("openDate", 0.toInt())
+            .findAll().sort("diff",Sort.ASCENDING)
+
+        Log.e("array",resultArray.toString())
+
+        return  resultArray
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,16 +59,6 @@ class MainActivity : AppCompatActivity() {
         var mainAdapter = MainListAdapter(this, openContactList)
         mainlist.adapter = mainAdapter
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//oreo以上
-            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val channel = NotificationChannel(
-                "default",
-                "Default",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            channel.description = "Default channel"
-            manager.createNotificationChannel(channel)
-        }
 
         nameTextView.setOnClickListener {
             val intent = BCReceiver.createIntent(this)
@@ -62,11 +76,8 @@ class MainActivity : AppCompatActivity() {
             nameTextView.setBackgroundColor(Color.GREEN)
         }
 
-
         settingButton.setOnClickListener {
-            //val intent = Intent(this,AddActivity::class.java)
-//            startActivity(intent)
-            settingButton.setBackgroundColor(Color.GREEN)
+            delete(openContactList[0]!!)
         }
         listButton.setOnClickListener {
             val intent = Intent(this, ContactListActivity::class.java)
@@ -74,11 +85,6 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
-
-    companion object {
-        fun createIntent(context: Context): Intent = Intent(context, MainActivity::class.java)
-    }
-
 
     fun getDiffDays(calendar1: Calendar, calendar2: Calendar): Int {
         //==== ミリ秒単位での差分算出 ====//
@@ -97,13 +103,12 @@ class MainActivity : AppCompatActivity() {
         return (diffTime / MILLIS_OF_DAY).toInt()
     }
 
-    fun showProgress() {
+    fun updateScreen() {
 
         var mainContact = realm.where(Contact::class.java)
             .greaterThan("openDate", 0.toInt()).findFirst()
 
         if (mainContact != null) {
-
             var tmp: Int = diffDays(mainContact.openDate)//開封日から現在の経過
             var diff = mainContact.limit - tmp//残り
             var castd = diff.toDouble()
@@ -113,25 +118,13 @@ class MainActivity : AppCompatActivity() {
             limitTextView.text = diff.toString()
             nameTextView.text = mainContact.name
         }
+
+
     }
 
-    fun readOpen(): RealmResults<Contact> {
-        var resultArray = realm.where(Contact::class.java).greaterThan("openDate", 0.toInt())
-            .findAll()//.sort("openDate", Sort.ASCENDING)
-        var realm = Realm.getDefaultInstance()
-
-        for (result in resultArray) {
-            realm.executeTransaction {
-                result.diff=diffDays(result.openDate+result.limit*1000 * 60 * 60 * 24)//残り何日
-            }
+    fun delete(contact: Contact) {
+        realm.executeTransaction {
+            contact.deleteFromRealm()
         }
-
-         resultArray = realm.where(Contact::class.java).greaterThan("openDate", 0.toInt())
-            .findAll().sort("diff",Sort.ASCENDING)
-
-
-        Log.e("array",resultArray.toString())
-
-        return  resultArray
     }
 }
