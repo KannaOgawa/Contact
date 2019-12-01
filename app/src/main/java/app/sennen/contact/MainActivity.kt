@@ -86,11 +86,9 @@ class MainActivity : AppCompatActivity() {
 
         calc()
         var mainContact = realm.where(Contact::class.java)
-            .greaterThan("openDate", 0.toInt()).sort("diff",Sort.ASCENDING).findFirst()
-
+            .greaterThan("openDate", 0.toInt()).sort("diff", Sort.ASCENDING).findFirst()
         if (mainContact != null) {
-            var tmp: Int = diffDays(mainContact.openDate)//開封日から現在の経過
-            var diff = mainContact.limit - tmp//残り
+            var diff = mainContact.limit - diffDays(mainContact.openDate)//残り
             var castd = diff.toDouble()
             var percent = (castd / (mainContact.limit)) * 100
 
@@ -98,8 +96,6 @@ class MainActivity : AppCompatActivity() {
             limitTextView.text = diff.toString()
             nameTextView.text = mainContact.name
         }
-
-
     }
 
     fun delete(contact: Contact) {
