@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#4FC3F7"
+    android:background="@color/colorBackGround"
     tools:context=".MainActivity">
 
 
@@ -31,7 +31,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:text="X"
         android:textColor="#FDFDFD"
         android:textSize="60sp"
         app:layout_constraintBottom_toBottomOf="@+id/progressBar"
@@ -45,22 +44,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="TextView"
         android:textColor="#FFFFFF"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <ListView
         android:id="@+id/mainlist"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:divider="@null"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
-
+        app:layout_constraintTop_toBottomOf="@+id/nameTextView"
+        app:layout_constraintVertical_bias="0.569" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"

@@ -42,7 +42,6 @@ class ContactListActivity : AppCompatActivity() {
         addButton.setOnClickListener {
             val intent = Intent(this, AddActivity::class.java)
             startActivity(intent)
-            finish()
         }
 
         homeButton.setOnClickListener {

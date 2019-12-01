@@ -37,10 +37,10 @@ class MainActivity : AppCompatActivity() {
         for (result in resultArray) {
 
             realm.executeTransaction {
-                result.diff = result.limit-diffNow(result.openDate)//残り何日
-                Log.e("tag",result.diff.toString())
-
-
+                result.diff = result.limit-diffNow(result.openDate)//残り
+                if(result.diff<=0){
+                    result.openDate=0
+                }
             }
         }
     }
