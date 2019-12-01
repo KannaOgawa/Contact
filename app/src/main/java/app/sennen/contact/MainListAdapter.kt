@@ -12,11 +12,13 @@ class MainListAdapter(val context: Context,val contactList: OrderedRealmCollecti
     RealmBaseAdapter<Contact>(contactList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = layoutInflater.inflate(R.layout.custom_list_layout2, parent, false)
-        view.listText2_1.text=contactList[position].name
-        view.listText2_2.text=contactList[position].limit.toString()
-        view.progressBar2.progress = showProgress(position)
+            view.listText2_1.text = contactList[position].name
+            view.listText2_2.text = contactList[position].limit.toString()
+            view.progressBar2.progress = showProgress(position)
+
         return view
     }
 

@@ -24,7 +24,6 @@ class ContactListAdapter(val context: Context, val contactList: OrderedRealmColl
         view.listText2.text = contactList[position].num.toString() + "個"
         view.listText1.text = contactList[position].name
         view.customListmView.setOnClickListener {
-            Log.e("tag","adapterronclick")
             //lister.onclick(position)
             AlertDialog.Builder(this.context)
                     .setTitle("コンタクト開封")

@@ -38,13 +38,12 @@ class MainActivity : AppCompatActivity() {
     fun calc() {
         var resultArray = realm.where(Contact::class.java).greaterThan("openDate", 0.toInt())
             .findAll().sort("openDate", Sort.ASCENDING)
-
         for (result in resultArray) {
 
             var limit = Calendar.getInstance()
             limit.add(Calendar.DATE,result.limit)
             realm.executeTransaction {
-                result.diff=diffDayscal(result.openDate,limit)//残り何日
+                result.diff=diffDaysal(result.openDate,limit)//残り何日
             }
         }
     }
@@ -55,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         var mainAdapter = MainListAdapter(this, openContactList)
         mainlist.adapter = mainAdapter
+
         settingButton.setOnClickListener {
             delete(openContactList[0]!!)
         }
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun diffDayscal(calendar1: Long,calendar2: Calendar): Int {
+    fun diffDaysal(calendar1: Long,calendar2: Calendar): Int {
         //==== ミリ秒単位での差分算出 ====//
         val diffTime =  calendar2.timeInMillis-calendar1
         //==== 日単位に変換 ====//
@@ -84,8 +84,9 @@ class MainActivity : AppCompatActivity() {
     }
     fun updateScreen() {
 
+        calc()
         var mainContact = realm.where(Contact::class.java)
-            .greaterThan("openDate", 0.toInt()).findFirst()
+            .greaterThan("openDate", 0.toInt()).sort("diff",Sort.ASCENDING).findFirst()
 
         if (mainContact != null) {
             var tmp: Int = diffDays(mainContact.openDate)//開封日から現在の経過
