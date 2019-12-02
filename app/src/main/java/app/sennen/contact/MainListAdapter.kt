@@ -1,5 +1,6 @@
 package app.sennen.contact
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,7 @@ class MainListAdapter(val context: Context,val contactList: OrderedRealmCollecti
             view.listText2_1.text = contactList[position].name
             view.listText2_2.text = contactList[position].limit.toString()
             view.progressBar2.progress = showProgress(position)
+
             return view
         }
     }
@@ -44,10 +46,11 @@ class MainListAdapter(val context: Context,val contactList: OrderedRealmCollecti
 
     fun showProgress(position: Int) :Int{
 
-        var tmp:Int = diffDays(contactList[position].openDate)//開封日から現在の経過
-        var diff=contactList[position].limit-tmp//残り
-        var castd= diff.toDouble()
-        var percent =( castd /(contactList[position].limit))*100
+
+        var d = contactList[position].diff
+        var castd = d.toDouble()
+        var percent = (castd / (contactList[position].limit)) * 100
+
 
         return  percent.toInt()
     }

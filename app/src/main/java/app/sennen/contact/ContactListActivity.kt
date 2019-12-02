@@ -105,7 +105,7 @@ class ContactListActivity : AppCompatActivity() {
                         PendingIntent.FLAG_ONE_SHOT
                     )
                     var limitDay = Calendar.getInstance()
-                    limitDay.add(Calendar.SECOND, list[position]?.limit ?: 0)
+                    limitDay.add(Calendar.DATE, list[position]?.limit ?: 0)
                     val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     manager.setExact(AlarmManager.RTC_WAKEUP, limitDay.timeInMillis, contentIntent)
 

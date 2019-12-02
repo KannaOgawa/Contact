@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         //==== ミリ秒単位での差分算出 ====//
         val diffTime = now.timeInMillis-calendar1
         //==== 日単位に変換 ====//
-        val MILLIS_OF_DAY: Long = 1000 * 60 //* 60 * 24
+        val MILLIS_OF_DAY: Long = 1000 * 60 * 60 * 24
         return (diffTime / MILLIS_OF_DAY).toInt()
     }
 
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         //==== ミリ秒単位での差分算出 ====//
         val diffTime = calendar2.timeInMillis - calendar1
         //==== 日単位に変換 ====//
-        val MILLIS_OF_DAY: Long = 1000 * 60 //* 60 * 24
+        val MILLIS_OF_DAY: Long = 1000 *60 * 60 * 24
         return (diffTime / MILLIS_OF_DAY).toInt()
     }
 
