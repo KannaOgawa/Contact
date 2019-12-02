@@ -48,6 +48,8 @@
         android:layout_weight="1"
         android:max="100"
         android:progress="100"
+        android:progressTint="#FFFFFF"
+        android:progressBackgroundTint="#696969"
         />
 
 </LinearLayout>

@@ -52,9 +52,9 @@ class MainActivity : AppCompatActivity() {
         var mainAdapter = MainListAdapter(this, openContactList)
         mainlist.adapter = mainAdapter
 
-        settingButton.setOnClickListener {
-            delete(openContactList[0]!!)
-        }
+//        settingButton.setOnClickListener {
+//            delete(openContactList[0]!!)
+//        }
 
         listButton.setOnClickListener {
             val intent = Intent(this, ContactListActivity::class.java)

@@ -78,12 +78,6 @@
             android:layout_weight="1"
             app:srcCompat="@drawable/menu" />
 
-        <ImageView
-            android:id="@+id/settingButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/setting" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
