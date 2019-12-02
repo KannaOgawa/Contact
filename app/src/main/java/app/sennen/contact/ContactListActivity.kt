@@ -8,6 +8,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import io.realm.OrderedRealmCollection
 import io.realm.Realm
 import io.realm.RealmResults
@@ -21,6 +22,8 @@ class ContactListActivity : AppCompatActivity() {
         Realm.getDefaultInstance()
     }
     val list = readAll()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,52 +74,53 @@ class ContactListActivity : AppCompatActivity() {
     }
 
 
-    fun open(position:Int){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//oreo以上
-            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val channel = NotificationChannel(
-                "default",
-                "Default",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            channel.description = "Default channel"
-            manager.createNotificationChannel(channel)
-        }
-        //lister.onclick(position)
-        AlertDialog.Builder(this)
-            .setTitle("コンタクト開封")
-            .setMessage("使用開始しますか？")
-            .setPositiveButton("OK") { dialog, which ->
+    fun open(position:Int) {
 
-                var realm = Realm.getDefaultInstance()
-                val now = Calendar.getInstance ()
+        if (list[position]?.openDate==0.toLong()) {
 
-                val intent = BCReceiver.createIntent(this)
-                val contentIntent = PendingIntent.getBroadcast(
-                    this,
-                    1,
-                    intent,
-                    PendingIntent.FLAG_ONE_SHOT
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//oreo以上
+                val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val channel = NotificationChannel(
+                    "default",
+                    "Default",
+                    NotificationManager.IMPORTANCE_DEFAULT
                 )
-                var limitDay = Calendar.getInstance()
-                limitDay.add(Calendar.SECOND,list[position]?.limit ?: 0)
-                val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                manager.setExact(AlarmManager.RTC_WAKEUP, limitDay.timeInMillis, contentIntent)
-
-                realm.executeTransaction {
-                    list[position]?.openDate = now.timeInMillis
-                    list[position]!!.num--
-
-                }
+                channel.description = "Default channel"
+                manager.createNotificationChannel(channel)
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+            //lister.onclick(position)
+            AlertDialog.Builder(this)
+                .setTitle("コンタクト開封")
+                .setMessage("使用開始しますか？")
+                .setPositiveButton("OK") { dialog, which ->
 
+                    var realm = Realm.getDefaultInstance()
+                    val now = Calendar.getInstance()
+                    var count: Long = realm.where(Contact::class.java).count()
+                    val intent = BCReceiver.createIntent(this)
+                    val contentIntent = PendingIntent.getBroadcast(
+                        this,
+                        list[position]!!.id,
+                        intent,
+                        PendingIntent.FLAG_ONE_SHOT
+                    )
+                    var limitDay = Calendar.getInstance()
+                    limitDay.add(Calendar.SECOND, list[position]?.limit ?: 0)
+                    val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                    manager.setExact(AlarmManager.RTC_WAKEUP, limitDay.timeInMillis, contentIntent)
 
+                    realm.executeTransaction {
+                        list[position]?.openDate = now.timeInMillis
+                        list[position]!!.num--
+                    }
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        } else {
 
+                Log.e("tag",list[position]?.openDate.toString())
+            Toast.makeText(this, "すでに使用中のコンタクトがあります", Toast.LENGTH_SHORT).show()
+        }
 
     }
-
-
-
 }

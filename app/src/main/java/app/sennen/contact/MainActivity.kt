@@ -59,7 +59,6 @@ class MainActivity : AppCompatActivity() {
         listButton.setOnClickListener {
             val intent = Intent(this, ContactListActivity::class.java)
             startActivity(intent)
-            finish()
         }
 
         mainlist.setOnItemClickListener { parent, view, position, id ->
