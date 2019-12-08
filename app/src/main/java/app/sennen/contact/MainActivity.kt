@@ -102,9 +102,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun delete(contact: Contact) {
-        realm.executeTransaction {
-            contact.deleteFromRealm()
-        }
-    }
+
 }

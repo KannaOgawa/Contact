@@ -32,9 +32,6 @@ class ContactListAdapter(val context: Context, val contactList: OrderedRealmColl
     }
 
 
-    interface Click {
-        fun onclick(position: Int)
-    }
 
 
 

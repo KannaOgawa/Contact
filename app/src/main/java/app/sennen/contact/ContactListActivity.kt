@@ -2,20 +2,20 @@ package app.sennen.contact
 
 import android.app.*
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import io.realm.OrderedRealmCollection
+import androidx.appcompat.app.AppCompatActivity
 import io.realm.Realm
+import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.Sort
 import kotlinx.android.synthetic.main.activity_contact_list.*
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+
 
 class ContactListActivity : AppCompatActivity() {
     private val realm: Realm by lazy {
@@ -23,7 +23,10 @@ class ContactListActivity : AppCompatActivity() {
     }
     val list = readAll()
 
-
+    inline fun <reified Contact : RealmObject> Realm.getAutoIncrementKey(): Int {
+        if (where(Contact::class.java).count() == 0L) return 1
+        else return where(Contact::class.java).max("id")?.toInt()?.plus(1)!!
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +41,39 @@ class ContactListActivity : AppCompatActivity() {
             open(position)
         }
 
-//        if (list.isEmpty()) {
-//            create("contactName", 14, 3)
-//        }
+        if(list.isEmpty()){
+            create("Tap here to open new one",1,1)
+            create("LongTap here to delete",1,1)
+
+        }
+
+
+
+
+        listView1.setOnItemLongClickListener { parent, view, position, id ->
+
+            // 一番下の項目以外は長押しで削除
+            if (position == null) {
+                return@setOnItemLongClickListener false
+            } else {
+                AlertDialog.Builder(this)
+                    .setTitle("コンタクトを編集")
+                    .setMessage("削除しますか？")
+                    .setPositiveButton("削除",
+                        DialogInterface.OnClickListener { dialog, which ->
+                            delete(list[position]!!)
+                        })
+                    .setNegativeButton("キャンセル", null)
+                    .show()
+
+
+
+                return@setOnItemLongClickListener true
+            }
+
+        }
+
+
 
         addButton.setOnClickListener {
             val intent = Intent(this, AddActivity::class.java)
@@ -54,9 +87,17 @@ class ContactListActivity : AppCompatActivity() {
         }
     }
 
+
+    fun delete(contact: Contact) {
+        realm.executeTransaction {
+            contact.deleteFromRealm()
+        }
+    }
+
     fun create(name: String, l: Int, n: Int) {
         realm.executeTransaction {
-            val contact = it.createObject(Contact::class.java, UUID.randomUUID().toString())
+            val contact = it.createObject(Contact::class.java)
+            contact.id= realm.getAutoIncrementKey<Contact>()
             contact.name = name
             contact.limit = l
             contact.num = n
@@ -74,9 +115,9 @@ class ContactListActivity : AppCompatActivity() {
     }
 
 
-    fun open(position:Int) {
+    fun open(position: Int) {
 
-        if (list[position]?.openDate==0.toLong()) {
+        if (list[position]?.openDate == 0.toLong()) {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//oreo以上
                 val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -118,7 +159,7 @@ class ContactListActivity : AppCompatActivity() {
                 .show()
         } else {
 
-                Log.e("tag",list[position]?.openDate.toString())
+            Log.e("tag", list[position]?.openDate.toString())
             Toast.makeText(this, "すでに使用中のコンタクトがあります", Toast.LENGTH_SHORT).show()
         }
 
